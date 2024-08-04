@@ -1,0 +1,91 @@
+<%- include('./template/defaultHead.ejs') %>
+<body>
+    <script>
+        function gotoSetting(e){
+            location.href="/setting"
+        }
+        function doFollowing(){
+            location.href="/social/following/<%= info.id %>"
+        }
+        function undoFollowing(){
+            location.href="/social/unfollowing/<%= info.id %>"
+        }        
+        function gotoPost(id){
+            location.href='/post/'+id
+        }
+    </script>
+    <div style="width: 100%;">
+    <%- include('./template/component/navbar.ejs') %>
+
+    <div class="header">
+        <!-- 헤더 사진 -->
+    <% if( info.mainTitlePicture ){ %>
+        <%- include('./template/component/image.ejs',
+            {
+                src: info.mainTitlePicture ,
+                classes:"title-picture",etc:false 
+            }) 
+        %>
+    <% } else { %>
+        <div class="none-background-header"></div>
+    <% } %>
+    </div>
+    <div class="page-bottom">
+        <div class="main-desc">
+            <div class="desc-page">
+                <div class="profile-warp">
+                <% if( info.mainProfilePicture ){ %>
+                    <!-- 프로필 사진 -->
+                    <%- include('./template/component/image.ejs',
+                        {
+                            src: info.mainProfilePicture ,
+                            classes:"profile-picture",etc:false 
+                        }) 
+                    %>
+                <% } else { %>
+                    <div class="none-background-profile profile"></div>
+                <% } %>
+                </div>
+                <div class="desc-page-wrap">
+                    <div class="desc-page-title">
+                        <h1><%= info.nickname %></h1>
+                        <% if(mypage==true) { %>
+                            <!-- 내 메인일떄... -->
+                            <button class="btn btn-primary" onclick ="gotoSetting()">
+                                Setting...
+                            </button>
+                        <% } else if(myId) { %>
+                            <% if(!info.targetId){%>
+                            <button class="btn btn-primary " onclick ="doFollowing()">
+                                Follow
+                            </button>
+                            <%} else {%>
+                            <button class="btn btn-danger " onclick ="undoFollowing()">
+                                UnFollow
+                            </button>
+                            <% } %>
+                        <% } %>
+                    </div>
+                    <hr>
+                    <div class="desc-context">
+                        <%= info.mainDesc %>
+                    </div>
+                    <HR/>
+                    <div style="display: flex;">
+                        <div style="
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: space-around;">
+                            <% for(let c=0;c<posts.length;c++){%>
+                                <%- include('./template/component/post.ejs',{post:posts[c],postPic}) %>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('./template/component/footer.ejs') %>
+</body>
+
